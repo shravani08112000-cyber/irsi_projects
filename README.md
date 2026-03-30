@@ -160,7 +160,6 @@ ubuntu
 ### `EC2_SSH_KEY`
 
 Run:
-
 ```bash
 cat ~/.ssh/project-iris-key.pem
 ```
