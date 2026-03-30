@@ -116,9 +116,9 @@ EC2_HOST=YOUR_EC2_PUBLIC_IP
 Run these commands on your own machine:
 
 ```bash
-mv ~/Downloads/project-iris-keys.pem ~/.ssh/project-iris-keys.pem
-chmod 400 ~/.ssh/project-iris-keys.pem
-ssh -i ~/.ssh/project-iris-keys.pem ubuntu@3.238.179.181
+mv ~/Downloads/project-iris-key.pem ~/.ssh/project-iris-key.pem
+chmod 400 ~/.ssh/project-iris-key.pem
+ssh -i ~/.ssh/project-iris-key.pem ubuntu@3.238.179.181
 ```
 
 Replace:
@@ -160,6 +160,7 @@ ubuntu
 ### `EC2_SSH_KEY`
 
 Run:
+
 ```bash
 cat ~/.ssh/project-iris-key.pem
 ```
