@@ -1,0 +1,71 @@
+name: Deploy To AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  APP_DIR: /home/ubuntu/project-iris
+  SERVICE_NAME: project-iris
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Copy project files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "app.py,src,artifacts,requirements.txt,setup.py"
+          target: ${{ env.APP_DIR }}
+
+      - name: Install dependencies and restart app
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+            sudo apt-get update
+            sudo apt-get install -y python3-pip python3-venv
+
+            mkdir -p "${{ env.APP_DIR }}"
+            cd "${{ env.APP_DIR }}"
+
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install --upgrade pip
+            pip install -r requirements.txt
+            pip install -e .
+
+            cat <<EOF | sudo tee /etc/systemd/system/${{ env.SERVICE_NAME }}.service > /dev/null
+            [Unit]
+            Description=Project Iris Streamlit App
+            After=network.target
+
+            [Service]
+            User=${USER}
+            WorkingDirectory=${{ env.APP_DIR }}
+            Environment=PATH=${{ env.APP_DIR }}/venv/bin
+            ExecStart=${{ env.APP_DIR }}/venv/bin/streamlit run app.py --server.address=0.0.0.0 --server.port=8501
+            Restart=always
+            RestartSec=5
+
+            [Install]
+            WantedBy=multi-user.target
+            EOF
+
+            sudo systemctl daemon-reload
+            sudo systemctl enable "${{ env.SERVICE_NAME }}"
+            sudo systemctl restart "${{ env.SERVICE_NAME }}"
+            sudo systemctl status "${{ env.SERVICE_NAME }}" --no-pager
