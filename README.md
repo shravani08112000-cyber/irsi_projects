@@ -46,7 +46,7 @@ In `Instance type`:
 In `Key pair (login)`:
 
 1. Click `Create new key pair`
-2. Key pair name: `project-iris-key`
+2. Key pair name: `project-iris-key1`
 3. Key pair type: keep default
 4. Private key file format: `.pem`
 5. Click `Create key pair`
