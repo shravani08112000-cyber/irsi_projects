@@ -58,7 +58,7 @@ In `Network settings`:
 
 1. Click `Edit`
 2. Under `Security group`, choose `Create security group`
-3. Security group name: `project-iris-sg`
+3. Security group name: `project-iris-sgc`
 4. Description: `Security group for Project Iris`
 
 Add the first inbound rule:
@@ -116,9 +116,9 @@ EC2_HOST=YOUR_EC2_PUBLIC_IP
 Run these commands on your own machine:
 
 ```bash
-mv ~/Downloads/project-iris-key.pem ~/.ssh/project-iris-key.pem
-chmod 400 ~/.ssh/project-iris-key.pem
-ssh -i ~/.ssh/project-iris-key.pem ubuntu@3.238.179.181
+mv ~/Downloads/project-iris-key1.pem ~/.ssh/project-iris-key1.pem
+chmod 400 ~/.ssh/project-iris-key1.pem
+ssh -i ~/.ssh/project-iris-key1.pem ubuntu@100.27.253.33
 ```
 
 Replace:
@@ -162,7 +162,7 @@ ubuntu
 Run:
 
 ```bash
-cat ~/.ssh/project-iris-key.pem
+cat ~/.ssh/project-iris-key1.pem
 ```
 
 Copy the full output and paste it into the secret.
@@ -218,7 +218,7 @@ http://YOUR_EC2_PUBLIC_IP:8501
 SSH into the server:
 
 ```bash
-ssh -i ~/.ssh/project-iris-key.pem ubuntu@YOUR_EC2_PUBLIC_IP
+ssh -i ~/.ssh/project-iris-key1.pem ubuntu@YOUR_EC2_PUBLIC_IP
 ```
 
 Check service status:
